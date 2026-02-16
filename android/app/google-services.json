@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "771131079919",
+    "project_id": "turf-40t9vq",
+    "storage_bucket": "turf-40t9vq.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771131079919:android:03a087b9c7af006f5e6f1a",
+        "android_client_info": {
+          "package_name": "com.mycompany.turf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771131079919-g9bsdc71d4600skqftkd4kt7ks0g2qcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBROKPp0ZpsO6mDQAQNxQSZryUzRnA1AgQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771131079919-g9bsdc71d4600skqftkd4kt7ks0g2qcu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "771131079919-a44loq20i4on2e49gtafik6kasreuvgk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.turf"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
