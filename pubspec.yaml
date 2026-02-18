@@ -54,7 +54,7 @@ dependencies:
 
   # Utilities
   hive_flutter: ^1.1.0
-  shared_preferences: ^2.3.2
+  shared_preferences: ^2.5.4
   permission_handler: ^11.3.1
   dio: ^5.7.0
   intl: ^0.20.0
