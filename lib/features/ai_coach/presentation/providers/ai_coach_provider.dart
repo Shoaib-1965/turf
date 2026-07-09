@@ -163,7 +163,7 @@ class AiCoachNotifier extends Notifier<AiCoachState> {
     );
 
     try {
-      final response = await _repo.getCoachResponse(state.messages);
+      final response = await _repo.getCoachResponse(state.messages, state.coachContext);
 
       state = state.copyWith(
         messages: [...state.messages, response],
