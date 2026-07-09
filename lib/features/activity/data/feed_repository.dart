@@ -1,0 +1,82 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:turf_app/features/activity/domain/models/feed_activity.dart';
+
+class FeedRepository {
+  final SupabaseClient _supabase;
+
+  FeedRepository({SupabaseClient? supabase})
+      : _supabase = supabase ?? Supabase.instance.client;
+
+  String get _currentUserId => _supabase.auth.currentUser!.id;
+
+  /// Get personal activities
+  Future<List<FeedActivity>> getMyActivities({int offset = 0, int limit = 20}) async {
+    final response = await _supabase
+        .from('activity_sessions')
+        .select('*, profiles(*)')
+        .eq('user_id', _currentUserId)
+        .order('started_at', ascending: false)
+        .range(offset, offset + limit - 1);
+
+    return (response as List).map((e) => FeedActivity.fromJson(e)).toList();
+  }
+
+  /// Get friends activities (requires joining with friendships)
+  Future<List<FeedActivity>> getFriendsActivities({int offset = 0, int limit = 20}) async {
+    // 1. Get friend IDs
+    final friendsResponse = await _supabase
+        .from('friendships')
+        .select('requester_id, addressee_id')
+        .or('requester_id.eq.$_currentUserId,addressee_id.eq.$_currentUserId')
+        .eq('status', 'accepted');
+
+    final friendIds = <String>{};
+    for (var row in friendsResponse) {
+      final reqId = row['requester_id'] as String;
+      final addId = row['addressee_id'] as String;
+      friendIds.add(reqId == _currentUserId ? addId : reqId);
+    }
+
+    if (friendIds.isEmpty) return [];
+
+    // 2. Fetch activities for those IDs
+    final response = await _supabase
+        .from('activity_sessions')
+        .select('*, profiles(*)')
+        .inFilter('user_id', friendIds.toList())
+        .order('started_at', ascending: false)
+        .range(offset, offset + limit - 1);
+
+    return (response as List).map((e) => FeedActivity.fromJson(e)).toList();
+  }
+
+  /// Toggle like on an activity
+  Future<void> toggleLike(String sessionId, bool isLiking) async {
+    try {
+      final activity = await _supabase
+          .from('activity_sessions')
+          .select('metadata')
+          .eq('id', sessionId)
+          .single();
+          
+      final metadata = Map<String, dynamic>.from(activity['metadata'] as Map? ?? {});
+      int currentLikes = (metadata['like_count'] as num?)?.toInt() ?? 0;
+      
+      if (isLiking) {
+        currentLikes++;
+      } else {
+        currentLikes = currentLikes > 0 ? currentLikes - 1 : 0;
+      }
+      
+      metadata['like_count'] = currentLikes;
+      
+      await _supabase
+          .from('activity_sessions')
+          .update({'metadata': metadata})
+          .eq('id', sessionId);
+    } catch (e) {
+      // Ignored: metadata column doesn't exist in Supabase schema as per Phase 1 rules.
+      print('Like feature disabled: metadata column missing in Supabase');
+    }
+  }
+}
