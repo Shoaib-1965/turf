@@ -13,6 +13,7 @@ import 'package:geolocator/geolocator.dart' as geo;
 import 'package:confetti/confetti.dart';
 import 'package:turf_app/features/map/presentation/providers/territories_provider.dart';
 import 'package:turf_app/features/ai_coach/presentation/widgets/live_coaching_card.dart';
+import 'package:turf_app/features/ai_coach/presentation/providers/ai_coach_provider.dart';
 
 class LiveActivityScreen extends ConsumerStatefulWidget {
   const LiveActivityScreen({super.key});
@@ -346,6 +347,7 @@ class _LiveActivityScreenState extends ConsumerState<LiveActivityScreen>
   Widget build(BuildContext context) {
     final state = ref.watch(liveActivityProvider);
     final notifier = ref.read(liveActivityProvider.notifier);
+    final isTtsEnabled = ref.watch(aiCoachProvider).isTtsEnabled;
 
     if (state.status == TrackingState.countdown) {
       return _CountdownScreen(onComplete: () => notifier.startActivity());
@@ -505,6 +507,34 @@ class _LiveActivityScreenState extends ConsumerState<LiveActivityScreen>
                     child: const Icon(
                       Icons.people_alt_rounded,
                       color: Colors.black,
+                      size: 20,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // Mute/Unmute AI Coach Voice
+                GestureDetector(
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    ref.read(aiCoachProvider.notifier).toggleTts();
+                  },
+                  child: Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: isTtsEnabled ? Colors.white : const Color(0xFF1C1C1E),
+                      shape: BoxShape.circle,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      isTtsEnabled ? Icons.volume_up_rounded : Icons.volume_off_rounded,
+                      color: isTtsEnabled ? Colors.black : Colors.white54,
                       size: 20,
                     ),
                   ),

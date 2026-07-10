@@ -454,7 +454,7 @@ class _Tagline extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         const Text(
-          'version one step forward',
+          'V.10.2.6',
           style: TextStyle(
             color: Colors.white70,
             fontSize: 13,

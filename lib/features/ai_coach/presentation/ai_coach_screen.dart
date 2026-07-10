@@ -273,9 +273,11 @@ class _AiCoachScreenState extends ConsumerState<AiCoachScreen>
               tag: 'ai_coach_fab',
               child: Material(
                 color: Colors.transparent,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+                child: SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
                     // Title row
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -300,7 +302,7 @@ class _AiCoachScreenState extends ConsumerState<AiCoachScreen>
                     const SizedBox(height: 2),
                     // Subtitle
                     Text(
-                      'Powered by Gemma AI',
+                      'Your Personal Coach',
                       style: GoogleFonts.inter(
                         color: AppTheme.textSecondary,
                         fontSize: 11,
@@ -347,6 +349,7 @@ class _AiCoachScreenState extends ConsumerState<AiCoachScreen>
                       ],
                     ),
                   ],
+                ),
                 ),
               ),
             ),

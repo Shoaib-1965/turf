@@ -45,6 +45,21 @@ Guidelines:
     }
   }
 
+  /// Clears chat history from Supabase
+  Future<void> clearHistory() async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) return;
+
+    try {
+      await _supabase
+          .from('ai_chat_messages')
+          .delete()
+          .eq('user_id', userId);
+    } catch (e) {
+      print('Error clearing chat history: $e');
+    }
+  }
+
   /// Saves a single chat message to Supabase
   Future<void> saveMessage(ChatMessage message) async {
     final userId = _supabase.auth.currentUser?.id;

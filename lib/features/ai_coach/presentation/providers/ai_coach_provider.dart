@@ -62,7 +62,7 @@ final aiCoachProvider =
 
 class AiCoachNotifier extends Notifier<AiCoachState> {
   static const _welcomeText =
-      "Hey! 👋 I'm your TURF Coach powered by Gemma AI. I can help you with "
+      "Hey! 👋 I'm your TURF Coach. I can help you with "
       "running tips, nutrition advice, territory strategy, and more. "
       "What would you like to know?";
 
@@ -217,11 +217,11 @@ class AiCoachNotifier extends Notifier<AiCoachState> {
     state = state.copyWith(coachContext: context);
   }
 
-  /// Resets the chat to its initial welcome state (clears local state, does not delete from DB).
-  void clearChat() {
-    state = state.copyWith(
-      messages: [],
-    );
-    _loadHistory();
+  /// Resets the chat to its initial welcome state (clears local state and deletes from DB).
+  Future<void> clearChat() async {
+    state = state.copyWith(isLoading: true);
+    await _repo.clearHistory();
+    state = state.copyWith(messages: []);
+    await _loadHistory();
   }
 }
