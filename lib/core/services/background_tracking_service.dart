@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:workmanager/workmanager.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 
 @pragma('vm:entry-point')
 void callbackDispatcher() {
+  if (kIsWeb) return;
   Workmanager().executeTask((task, inputData) async {
     // In a real app, this would wake up, fetch location, and update Supabase.
     // However, continuous tracking is better handled by Foreground Services.
@@ -45,6 +47,7 @@ class BackgroundTrackingService {
       FlutterLocalNotificationsPlugin();
 
   static Future<void> initialize() async {
+    if (kIsWeb) return;
     // Initialize Local Notifications
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -64,6 +67,7 @@ class BackgroundTrackingService {
   }
 
   static Future<void> startTrackingTask() async {
+    if (kIsWeb) return;
     await Workmanager().registerPeriodicTask(
       "1",
       "location_update_task",
@@ -76,11 +80,13 @@ class BackgroundTrackingService {
   }
 
   static Future<void> stopTrackingTask() async {
+    if (kIsWeb) return;
     await Workmanager().cancelByUniqueName("1");
     await flutterLocalNotificationsPlugin.cancel(888);
   }
 
   static Future<void> showTrackingNotification(String title, String body) async {
+    if (kIsWeb) return;
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'tracking_channel',
       'Live Tracking',

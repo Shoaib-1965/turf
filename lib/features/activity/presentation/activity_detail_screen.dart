@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' if (dart.library.html) 'package:turf_app/core/utils/platform_utils.dart';
+import 'package:turf_app/features/map/widgets/map_view.dart';
 import 'package:turf_app/core/utils/polyline_codec.dart';
 import 'package:turf_app/core/widgets/user_avatar.dart';
 import 'package:turf_app/features/activity/domain/models/feed_activity.dart';
@@ -64,7 +65,7 @@ class ActivityDetailScreen extends StatelessWidget {
             if (routePoints.isNotEmpty)
               SizedBox(
                 height: 300,
-                child: MapWidget(
+                child: TurfMapView(
                   key: const ValueKey("detailMap"),
                   onMapCreated: (MapboxMap mapboxMap) async {
                     mapboxMap.loadStyleURI('mapbox://styles/shoaib1965/cmqm2b0qd009m01s1h9773jnl');

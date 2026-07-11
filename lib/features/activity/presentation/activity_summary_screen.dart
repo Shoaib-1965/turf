@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' if (dart.library.html) 'package:turf_app/core/utils/platform_utils.dart';
+import 'package:turf_app/features/map/widgets/map_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:confetti/confetti.dart';
 import 'package:turf_app/features/activity/domain/models/activity_session.dart';
@@ -68,7 +69,7 @@ class _ActivitySummaryScreenState extends State<ActivitySummaryScreen> {
                       borderRadius: BorderRadius.circular(16),
                       child: SizedBox(
                         height: 250,
-                        child: MapWidget(
+                        child: TurfMapView(
                           key: const ValueKey("summaryMap"),
                           onMapCreated: (MapboxMap mapboxMap) async {
                             mapboxMap.loadStyleURI(

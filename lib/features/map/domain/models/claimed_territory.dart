@@ -1,4 +1,4 @@
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' if (dart.library.html) 'package:turf_app/core/utils/platform_utils.dart';
 
 /// Represents an organic territory claimed by a user by running a closed loop.
 /// Maps to the `claimed_territories` Supabase table.

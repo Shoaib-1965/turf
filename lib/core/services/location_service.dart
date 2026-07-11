@@ -1,12 +1,14 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' if (dart.library.html) 'package:turf_app/core/utils/platform_utils.dart' as mapbox;
 
 class LocationService {
   static const String _lastLocationKey = 'last_known_location';
 
   Future<bool> handlePermission() async {
+    if (kIsWeb) return false;
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -43,6 +45,7 @@ class LocationService {
   }
 
   Stream<Position> getPositionStream() {
+    if (kIsWeb) return const Stream.empty();
     return Geolocator.getPositionStream(
       locationSettings: const LocationSettings(
         accuracy: LocationAccuracy.high,

@@ -1,4 +1,4 @@
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' if (dart.library.html) 'package:turf_app/core/utils/platform_utils.dart';
 
 class PolylineCodec {
   static String encode(List<Position> points) {

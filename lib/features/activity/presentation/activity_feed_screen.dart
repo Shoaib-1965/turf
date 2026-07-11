@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' if (dart.library.html) 'package:turf_app/core/utils/platform_utils.dart';
+import 'package:turf_app/features/map/widgets/map_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -378,7 +379,7 @@ class FeedCard extends ConsumerWidget {
               SizedBox(
                 height: 180,
                 child: ClipRRect(
-                  child: MapWidget(
+                  child: TurfMapView(
                     key: ValueKey("feedMap_${activity.session.id}"),
                     onMapCreated: (MapboxMap mapboxMap) async {
                       mapboxMap.loadStyleURI(

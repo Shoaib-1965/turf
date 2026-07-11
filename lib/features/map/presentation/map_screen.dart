@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' if (dart.library.html) 'package:turf_app/core/utils/platform_utils.dart';
+import 'package:turf_app/features/map/widgets/map_view.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:confetti/confetti.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -67,6 +69,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   Future<void> _checkLocationPermissionFlow() async {
+    if (kIsWeb) return;
     final permission = await geo.Geolocator.checkPermission();
     if (permission == geo.LocationPermission.whileInUse || 
         permission == geo.LocationPermission.always) {
@@ -760,7 +763,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          MapWidget(
+          TurfMapView(
             key: const ValueKey('mainMap'),
             cameraOptions: CameraOptions(
               center: Point(coordinates: Position(2.3522, 48.8566)), // Paris Default

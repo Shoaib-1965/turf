@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' if (dart.library.html) 'package:turf_app/core/utils/platform_utils.dart' as mapbox;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:turf_app/core/services/background_tracking_service.dart';
 import 'package:turf_app/core/utils/polyline_codec.dart';

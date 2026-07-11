@@ -1,11 +1,13 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' if (dart.library.html) 'package:turf_app/core/utils/platform_utils.dart';
+import 'package:turf_app/features/map/widgets/map_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:turf_app/features/activity/presentation/providers/live_activity_provider.dart';
 import 'package:turf_app/features/map/widgets/territory_claim_celebration.dart';
@@ -390,8 +392,8 @@ class _LiveActivityScreenState extends ConsumerState<LiveActivityScreen>
         children: [
           // --- FULL BLEED MAP ---
           Positioned.fill(
-            child: MapWidget(
-              key: const ValueKey('liveActivityMap'),
+            child: TurfMapView(
+              key: const ValueKey("liveMap"),
               cameraOptions: CameraOptions(
                 zoom: 17.0,
                 pitch: 45.0, // Pitched view as requested
@@ -413,19 +415,21 @@ class _LiveActivityScreenState extends ConsumerState<LiveActivityScreen>
                 );
 
                 try {
-                  final position = await geo.Geolocator.getCurrentPosition();
-                  await mapboxMap.setCamera(
-                    CameraOptions(
-                      center: Point(
-                        coordinates: Position(
-                          position.longitude,
-                          position.latitude,
+                  if (!kIsWeb) {
+                    final position = await geo.Geolocator.getCurrentPosition();
+                    await mapboxMap.setCamera(
+                      CameraOptions(
+                        center: Point(
+                          coordinates: Position(
+                            position.longitude,
+                            position.latitude,
+                          ),
                         ),
+                        zoom: 17.0,
+                        pitch: 45.0,
                       ),
-                      zoom: 17.0,
-                      pitch: 45.0,
-                    ),
-                  );
+                    );
+                  }
                 } catch (_) {}
 
                 final annMan = mapboxMap.annotations;
